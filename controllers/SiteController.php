@@ -125,4 +125,13 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    /**
+     *  Diplays calculator form
+     */
+
+     public function actionCalculator()
+    {
+        return $this->render('calculator.php');
+    }
 }
