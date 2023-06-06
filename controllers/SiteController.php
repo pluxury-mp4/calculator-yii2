@@ -61,7 +61,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return "hello world";
+        return $this->render('index.php');
     }
 
     /**
@@ -124,5 +124,14 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     *  Diplays calculator form
+     */
+
+     public function actionCalculator()
+    {
+        return $this->render('calculator.php');
     }
 }
