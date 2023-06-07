@@ -132,6 +132,6 @@ class SiteController extends Controller
 
      public function actionCalculator()
     {
-        return $this->render('calculator.php');
+        return $this->render('calculator');
     }
 }
