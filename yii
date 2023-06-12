@@ -14,17 +14,17 @@ require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
 
 $bathfile = Yii::getAlias('runtime/queue.job');
 $config = require __DIR__ . '/config/console.php';
+
 $counter = 1;
-while(true){
+
+while (true) {
     echo "Счетчик " . $counter++, PHP_EOL;
-    if (file_exists($bathfile)){
-       echo file_get_contents($bathfile);
+    if (file_exists($bathfile)) {
+        echo file_get_contents($bathfile);
         unlink($bathfile);
     }
     sleep(2);
 }
-
-
 
 
 die();

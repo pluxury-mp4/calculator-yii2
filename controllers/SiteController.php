@@ -134,13 +134,17 @@ class SiteController extends Controller
     public function actionCalculator()
     {
         $bathfile = Yii::getAlias('../runtime/queue.job');
+
         if (file_exists($bathfile)) {
-            unlink($bathfile);}
-        if (! file_exists($bathfile)){
-            foreach ($_POST['CalculatorForm'] as $value) {
-                file_put_contents($bathfile, $value . PHP_EOL, FILE_APPEND);
+            unlink($bathfile);
+        }
+
+        if (!file_exists($bathfile)) {
+            foreach ($_POST['CalculatorForm'] as $key => $value) {
+                file_put_contents($bathfile, $key . "=>" . $value . PHP_EOL, FILE_APPEND);
             }
         }
-            return $this->render('calculator');
+
+        return $this->render('calculator');
     }
 }
