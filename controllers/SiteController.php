@@ -144,7 +144,7 @@ class SiteController extends Controller
                 unlink($bathfile);
             }
 
-            foreach ($_POST['CalculatorForm'] as $key => $value) {
+            foreach ($model->getAttributes() as $key => $value) {
                 file_put_contents($bathfile, "$key => $value \n", FILE_APPEND);
             }
 

@@ -6,7 +6,6 @@ use app\config\Prices;
 $this->title = "Calculator";
 
 $form = \yii\widgets\ActiveForm::begin();
-$model = new CalculatorForm();
 $price = new Prices();
 ?>
 <div class="container mt-5">
@@ -39,17 +38,13 @@ $price = new Prices();
                         Результат:
                         <?php
 
-                        $tonnage = $_POST['CalculatorForm']['tonnage'];
-                        $month = $_POST['CalculatorForm']['month'];
-                        $type = $_POST['CalculatorForm']['raw_type'];
-
                         $result = 0;
 
                         $shrot = $price->shrot;
                         $jmih = $price->jmih;
                         $soya = $price->soya;
 
-                        switch ($type) {
+                        switch ($model->raw_type) {
                             case ('Жмых'):
                                 print_r($jmih[$tonnage][$month]);
                                 break;
@@ -68,28 +63,21 @@ $price = new Prices();
                                     <th>
                                         Месяц/Тоннаж
                                     </th>
-                                    <?php foreach ($price->shrot['25'] as $key => $value): ?>
-                                        <th>
-                                            <?= $key ?>
-                                        </th>
-                                    <?php endforeach ?>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
 
 
 
-                                <?php foreach (array_keys($price->shrot) as $value): ?>
+                              
                                     <tr>
                                         <td>
                                             <?= $value ?>
-                                        </td>
-                                            <?php foreach ($price->shrot[$value] as $key => $val): ?>
-                                            <td>
-                                                <?= $val ?>
-                                            </td>
-                                        <?php endforeach ?>
-
+                                        </td><?php foreach (dd( $price->price[$model->raw_type]) as $key => $value): ?>
+                                        <th>
+                                            <?= $key ?>
+                                        </th>
                                     <?php endforeach ?>
                                     </td>
                                 </tr>

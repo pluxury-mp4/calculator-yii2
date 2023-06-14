@@ -2,11 +2,12 @@
 
 use app\models\CalculatorForm;
 use yii\helpers\Html;
+use app\config\Prices;
 
 $this->title = "Calculator";
 
 $form = \yii\widgets\ActiveForm::begin();
-$model = new CalculatorForm();
+$price = new Prices();
 ?>
 <div class="container mt-5">
     <div class="d-flex justify-content-center">
@@ -49,6 +50,44 @@ $model = new CalculatorForm();
                 </div>
             </div>
             <?= Html::submitButton($content = "Рассчитать", ["class" => "btn btn-success"]) ?>
+
+            <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Месяц/Тоннаж
+                                    </th>
+                                    <?php foreach ($price->shrot['25'] as $key => $value): ?>
+                                        <th>
+                                            <?= $key ?>
+                                        </th>
+                                    <?php endforeach ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+
+                                <?php foreach (array_keys($price->shrot) as $value): ?>
+                                    <tr>
+                                        <td>
+                                            <?= $value ?>
+                                        </td>
+                                            <?php foreach ($price->shrot[$value] as $key => $val): ?>
+                                            <td>
+                                                <?= $val ?>
+                                            </td>
+                                        <?php endforeach ?>
+
+                                    <?php endforeach ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
         </fieldset>
     </div>
 </div>
