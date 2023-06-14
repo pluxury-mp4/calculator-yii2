@@ -11,7 +11,7 @@ $model = new CalculatorForm();
 <div class="container mt-5">
     <div class="d-flex justify-content-center">
         <fieldset class="form-control" id="disabledInput" type="text" placeholder="Disabled input here...">
-            <legend>Калькулятор расчета стоимости доставки</legend>
+            <legend>Калькулятор стоимости доставки сырья</legend>
             <div>
                 <div class="mb-3">
                     <?= $form->field($model, 'month')->dropDownList([
@@ -21,6 +21,8 @@ $model = new CalculatorForm();
                         'Сентябрь' => 'Сентябрь',
                         'Октябрь' => 'Октябрь',
                         'Ноябрь' => 'Ноябрь',
+                    ],[
+                            'prompt' => 'Выберите параметр'
                     ]);
                     ?>
                 </div>
@@ -29,7 +31,9 @@ $model = new CalculatorForm();
                         'Шрот' => 'Шрот',
                         'Жмых' => 'Жмых',
                         'Соя' => 'Соя',
-                    ]);
+                    ],[
+                            'prompt' => 'Выберите параметр'
+                        ]);
                     ?>
                 </div>
                 <div class="mb-3">
@@ -38,6 +42,8 @@ $model = new CalculatorForm();
                         '50' => '50',
                         '75' => '75',
                         '100' => '100',
+                    ],[
+                        'prompt' => 'Выберите параметр'
                     ]);
                     ?>
                 </div>

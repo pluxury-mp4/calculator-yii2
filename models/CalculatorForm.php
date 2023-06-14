@@ -16,4 +16,11 @@ class CalculatorForm extends \yii\base\Model
             'tonnage' => 'Тоннаж',
         ];
     }
+
+    public function rules()
+    {
+        return [
+            [['month','raw_type','tonnage'], 'required', 'message' => 'Необходимо заполнить поле']
+        ];
+    }
 }

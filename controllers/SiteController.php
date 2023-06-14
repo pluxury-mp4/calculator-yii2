@@ -13,6 +13,7 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -135,16 +136,20 @@ class SiteController extends Controller
     {
         $bathfile = Yii::getAlias('../runtime/queue.job');
 
-        if (file_exists($bathfile)) {
-            unlink($bathfile);
-        }
+        $model = new CalculatorForm;
 
-        if (!file_exists($bathfile)) {
-            foreach ($_POST['CalculatorForm'] as $key => $value) {
-                file_put_contents($bathfile, $key . "=>" . $value . PHP_EOL, FILE_APPEND);
+        if ($model->load(Yii::$app->request->post())) {
+
+            if (file_exists($bathfile)) {
+                unlink($bathfile);
             }
-        }
 
-        return $this->render('calculator');
+            foreach ($_POST['CalculatorForm'] as $key => $value) {
+                file_put_contents($bathfile, "$key => $value \n", FILE_APPEND);
+            }
+
+            return $this->render('calculator-confirm', ['model' => $model,]);
+        }
+        return $this->render('calculator', ['model' => $model]);
     }
 }
