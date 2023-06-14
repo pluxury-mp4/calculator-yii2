@@ -17,16 +17,19 @@ $price = new Prices();
                 <div class="mb-3">
                     <p>Выбранные параметры: </p>
 
-                    Месяц: <?php
-                    echo(implode([$_POST['CalculatorForm']['month']]));
+                    Месяц:
+                    <?php
+                    echo (implode([$_POST['CalculatorForm']['month']]));
                     ?> <br>
 
-                    Тип сырья: <?php
-                    echo(implode([$_POST['CalculatorForm']['raw_type']]));
+                    Тип сырья:
+                    <?php
+                    echo (implode([$_POST['CalculatorForm']['raw_type']]));
                     ?><br>
 
-                    Тоннаж: <?php
-                    echo(implode([$_POST['CalculatorForm']['tonnage']]));
+                    Тоннаж:
+                    <?php
+                    echo (implode([$_POST['CalculatorForm']['tonnage']]));
                     ?><br>
 
                 </div>
@@ -58,6 +61,42 @@ $price = new Prices();
                                 break;
                         }
                         ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Месяц/Тоннаж
+                                    </th>
+                                    <?php foreach ($price->shrot['25'] as $key => $value): ?>
+                                        <th>
+                                            <?= $key ?>
+                                        </th>
+                                    <?php endforeach ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+
+                                <?php foreach (array_keys($price->shrot) as $value): ?>
+                                    <tr>
+                                        <td>
+                                            <?= $value ?>
+                                        </td>
+                                            <?php foreach ($price->shrot[$value] as $key => $val): ?>
+                                            <td>
+                                                <?= $val ?>
+                                            </td>
+                                        <?php endforeach ?>
+
+                                    <?php endforeach ?>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
                     </p>
                 </div>
             </div>

@@ -7,6 +7,7 @@ class CalculatorForm extends \yii\base\Model
     public $month;
     public $raw_type;
     public $tonnage;
+    public $table;
 
     public function attributeLabels()
     {
@@ -16,6 +17,7 @@ class CalculatorForm extends \yii\base\Model
             'tonnage' => 'Тоннаж',
         ];
     }
+
 
     public function rules()
     {
