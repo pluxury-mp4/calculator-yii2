@@ -22,8 +22,8 @@ $price = new Prices();
                         'Сентябрь' => 'Сентябрь',
                         'Октябрь' => 'Октябрь',
                         'Ноябрь' => 'Ноябрь',
-                    ],[
-                            'prompt' => 'Выберите параметр'
+                    ], [
+                        'prompt' => 'Выберите параметр'
                     ]);
                     ?>
                 </div>
@@ -32,9 +32,9 @@ $price = new Prices();
                         'Шрот' => 'Шрот',
                         'Жмых' => 'Жмых',
                         'Соя' => 'Соя',
-                    ],[
-                            'prompt' => 'Выберите параметр'
-                        ]);
+                    ], [
+                        'prompt' => 'Выберите параметр'
+                    ]);
                     ?>
                 </div>
                 <div class="mb-3">
@@ -43,52 +43,64 @@ $price = new Prices();
                         '50' => '50',
                         '75' => '75',
                         '100' => '100',
-                    ],[
+                    ], [
                         'prompt' => 'Выберите параметр'
                     ]);
                     ?>
                 </div>
             </div>
             <?= Html::submitButton($content = "Рассчитать", ["class" => "btn btn-success"]) ?>
-
+            <?php
+            if (!empty($model->raw_type)){
+            ?>
+<div>
+            <p class="pt-2 fs-6 ">
+               Выбранный месяц:
+                <strong> <?=$model->month?> </strong><br>
+                Выбранный тип сырья:
+                <strong><?=$model->raw_type?> </strong><br>
+                Выбранный тоннаж:
+                <strong> <?=$model->tonnage?></strong> <br>
+                Итог:
+                <strong> <?=$price->price[$model->raw_type][$model->month][$model->tonnage]?> </strong> <br>
+            </p>
+</div>
             <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Месяц/Тоннаж
-                                    </th>
-                                    <?php foreach ($price->shrot['25'] as $key => $value): ?>
-                                        <th>
-                                            <?= $key ?>
-                                        </th>
-                                    <?php endforeach ?>
-                                </tr>
-                            </thead>
-                            <tbody>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Месяц/Тоннаж
+                        </th>
+                        <?php
+                        foreach ($price->price[$model->raw_type][$model->month] as $key => $value):?>
+                            <th>
+                            <?= $key ?>
+                            </th>
+                        <?php endforeach ?>
+                    </tr>
+                    </thead>
 
-
-
-                                <?php foreach (array_keys($price->shrot) as $value): ?>
-                                    <tr>
-                                        <td>
-                                            <?= $value ?>
-                                        </td>
-                                            <?php foreach ($price->shrot[$value] as $key => $val): ?>
-                                            <td>
-                                                <?= $val ?>
-                                            </td>
-                                        <?php endforeach ?>
-
-                                    <?php endforeach ?>
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-
+                    <tbody>
+                    <?php foreach (array_keys($price->price[$model->raw_type]) as $value): ?>
+                    <tr>
+                        <td>
+                            <?= $value ?>
+                        </td>
+                        <?php foreach ($price->price[$model->raw_type][$value] as $key => $val): ?>
+                            <td>
+                                <?= $val ?>
+                            </td>
+                        <?php endforeach ?>
+                        <?php endforeach ?>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </fieldset>
     </div>
 </div>
+
+<?php } ?>
 <?php \yii\widgets\ActiveForm::end() ?>

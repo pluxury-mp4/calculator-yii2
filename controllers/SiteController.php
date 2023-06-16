@@ -148,7 +148,7 @@ class SiteController extends Controller
                 file_put_contents($bathfile, "$key => $value \n", FILE_APPEND);
             }
 
-            return $this->render('calculator-confirm', ['model' => $model,]);
+            return $this->render('calculator', ['model' => $model,]);
         }
         return $this->render('calculator', ['model' => $model]);
     }
