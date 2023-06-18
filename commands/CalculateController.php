@@ -45,15 +45,16 @@ class CalculateController extends Controller
 
         if (!empty($incorrectData)) {
             echo "Выполнение команды завершено с ошибкой" . PHP_EOL .
-                implode(PHP_EOL , $incorrectData) . PHP_EOL .
+                implode(PHP_EOL, $incorrectData) . PHP_EOL .
                 "проверьте корректность введенных значений";
             return ExitCode::DATAERR;
         }
 
+        echo "Тип - $raw_type" . PHP_EOL .
+            "Месяц - $month" . PHP_EOL .
+            "Тоннаж - $tonnage" . PHP_EOL;
 
-        echo "ok";
+        print_r("Результат - " . $priceObj->price[$raw_type][$month][$tonnage]);
         return ExitCode::OK;
-
-
     }
 }
