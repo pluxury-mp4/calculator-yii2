@@ -10,7 +10,7 @@ use yii\web\Response;
 
 class ProcessController extends \yii\console\Controller
 {
-    public function actionQueue()
+    public function actionQueueResult()
     {
         $bathfile = Yii::getAlias('runtime/queue.job');
 

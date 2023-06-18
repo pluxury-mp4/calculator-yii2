@@ -7,8 +7,6 @@ class CalculatorForm extends \yii\base\Model
     public $month;
     public $raw_type;
     public $tonnage;
-    public $table;
-    public $result;
 
     public function attributeLabels()
     {
