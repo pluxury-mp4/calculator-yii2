@@ -147,8 +147,6 @@ class SiteController extends Controller
             foreach ($model->getAttributes() as $key => $value) {
                 file_put_contents($bathfile, "$key => $value \n", FILE_APPEND);
             }
-
-            return $this->render('calculator', ['model' => $model,]);
         }
         return $this->render('calculator', ['model' => $model]);
     }
