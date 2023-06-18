@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\CalculatorForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -12,6 +13,7 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -127,11 +129,27 @@ class SiteController extends Controller
     }
 
     /**
-     *  Diplays calculator form
+     *  Displays calculator form
      */
 
-     public function actionCalculator()
+    public function actionCalculator()
     {
-        return $this->render('calculator');
+        $bathfile = Yii::getAlias('../runtime/queue.job');
+
+        $model = new CalculatorForm;
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            if (file_exists($bathfile)) {
+                unlink($bathfile);
+            }
+
+            foreach ($model->getAttributes() as $key => $value) {
+                file_put_contents($bathfile, "$key => $value \n", FILE_APPEND);
+            }
+
+            return $this->render('calculator', ['model' => $model,]);
+        }
+        return $this->render('calculator', ['model' => $model]);
     }
 }
