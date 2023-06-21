@@ -3,10 +3,7 @@
 
 namespace app\commands;
 
-use app\models\CalculatorForm;
 use Yii;
-use yii\web\Controller;
-use yii\web\Response;
 
 class ProcessController extends \yii\console\Controller
 {
