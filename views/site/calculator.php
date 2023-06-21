@@ -1,13 +1,10 @@
 <?php
 
-use app\models\CalculatorForm;
 use yii\helpers\Html;
-use app\config\Prices;
 
 $this->title = "Calculator";
 
 $form = \yii\widgets\ActiveForm::begin();
-$price = new Prices();
 ?>
 <div class="container mt-5">
     <div class="d-flex justify-content-center">
@@ -62,7 +59,7 @@ $price = new Prices();
                 Выбранный тоннаж:
                 <strong> <?=$model->tonnage?></strong> <br>
                 Итог:
-                <strong> <?=$price->price[$model->raw_type][$model->month][$model->tonnage]?> </strong> <br>
+                <strong> <?=\Yii::$app->params['prices'][$model->raw_type][$model->month][$model->tonnage]?> </strong> <br>
             </p>
 </div>
             <div class="table-responsive">
@@ -73,7 +70,7 @@ $price = new Prices();
                             Месяц/Тоннаж
                         </th>
                         <?php
-                        foreach ($price->price[$model->raw_type][$model->month] as $key => $value):?>
+                        foreach (\Yii::$app->params['prices'][$model->raw_type][$model->month] as $key => $value):?>
                             <th>
                             <?= $key ?>
                             </th>
@@ -82,12 +79,12 @@ $price = new Prices();
                     </thead>
 
                     <tbody>
-                    <?php foreach (array_keys($price->price[$model->raw_type]) as $value): ?>
+                    <?php foreach (array_keys(\Yii::$app->params['prices'][$model->raw_type]) as $value): ?>
                     <tr>
                         <td>
                             <?= $value ?>
                         </td>
-                        <?php foreach ($price->price[$model->raw_type][$value] as $key => $val): ?>
+                        <?php foreach (\Yii::$app->params['prices'][$model->raw_type][$value] as $key => $val): ?>
                             <td>
                                 <?= $val ?>
                             </td>
