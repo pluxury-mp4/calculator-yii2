@@ -10,7 +10,6 @@ class CalculateController extends Controller
 {
     public function actionIndex($raw_type = "", $month = "", $tonnage = 0)
     {
-        $priceObj = new Prices();
 
         $missingParams = [];
 
@@ -31,15 +30,15 @@ class CalculateController extends Controller
         }
 
         $incorrectData = [];
-        if (!isset($priceObj->price[$raw_type])) {
+        if (!isset(\Yii::$app->params['prices'][$raw_type])) {
             $incorrectData[] = "Не найден прайс для значения $raw_type";
         }
 
-        if (!isset($priceObj->price[$raw_type][$month])) {
+        if (!isset(\Yii::$app->params['prices'][$raw_type][$month])) {
             $incorrectData[] = "Не найден прайс для значения $month";
         }
 
-        if (!isset($priceObj->price[$raw_type][$month][$tonnage])) {
+        if (!isset(\Yii::$app->params['prices'][$raw_type][$month][$tonnage])) {
             $incorrectData[] = "Не найден прайс для значения $tonnage";
         }
 
@@ -54,7 +53,7 @@ class CalculateController extends Controller
             "Месяц - $month" . PHP_EOL .
             "Тоннаж - $tonnage" . PHP_EOL;
 
-        print_r("Результат - " . $priceObj->price[$raw_type][$month][$tonnage]);
+        print_r("Результат - " . \Yii::$app->params['prices'][$raw_type][$month][$tonnage]);
         return ExitCode::OK;
     }
 }
