@@ -2,9 +2,12 @@
 
 namespace app\commands;
 
+use LucidFrame\Console\ConsoleTable;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use app\config\Prices;
+use yii\helpers\BaseConsole;
+use yii\helpers\Console;
 
 class CalculateController extends Controller
 {
@@ -54,6 +57,31 @@ class CalculateController extends Controller
             "Тоннаж - $tonnage" . PHP_EOL;
 
         print_r("Результат - " . \Yii::$app->params['prices'][$raw_type][$month][$tonnage]);
+
+        echo PHP_EOL;
+
+        $this->drawTable(\Yii::$app->params['prices'], $raw_type);
+
         return ExitCode::OK;
+    }
+
+    public function drawTable(array $prices, string $raw_type)
+    {
+
+        $table = new ConsoleTable();
+
+        $monthsArr = array_keys($prices[$raw_type]);
+        $tonnagesArr = array_keys($prices[$raw_type][$monthsArr[0]]);
+
+        $table->setHeaders(array_merge(['М/Т'], $monthsArr));
+
+        foreach ($tonnagesArr as $tonnage) {
+            $row = [$tonnage];
+            foreach ($monthsArr as $month) {
+                $row[] = $prices[$raw_type][$month][$tonnage];
+            }
+            $table->addRow($row);
+        }
+        Console::output($table->getTable());
     }
 }
