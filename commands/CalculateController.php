@@ -5,8 +5,6 @@ namespace app\commands;
 use LucidFrame\Console\ConsoleTable;
 use yii\console\Controller;
 use yii\console\ExitCode;
-use app\config\Prices;
-use yii\helpers\BaseConsole;
 use yii\helpers\Console;
 
 class CalculateController extends Controller

@@ -29,3 +29,9 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+
+# yii
+yii
+
+# web/index.php
+web/index.php
