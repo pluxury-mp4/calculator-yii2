@@ -1,53 +1,105 @@
 <?php
 
-/** @var yii\web\View $this */
+use yii\helpers\Html;
 
-$this->title = 'My Yii Application';
+$this->title = "Calculator";
+
+$form = \yii\widgets\ActiveForm::begin();
 ?>
-<div class="site-index">
+<div class="container mt-2">
+    <div class="d-flex justify-content-center">
+        <fieldset class="form-control" id="disabledInput" type="text" placeholder="Disabled input here...">
+            <h2>
+                Калькулятор стоимости доставки сырья
+            </h2>
 
-    <div class="jumbotron text-center bg-transparent mt-5 mb-5">
-        <h1 class="display-4">Congratulations!</h1>
+            <div>
+                <div class="mb-3">
+                    <?=
+                    $form->field($model, 'month')->
+                    dropDownList(
+                        $repository->getMonthsList(),
+                        ['prompt' => 'Выберите параметр']
+                    );
+                    ?>
+                </div>
+                <div class="mb-3">
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                    <?=
+                    $form->field($model, 'raw_type')
+                        ->dropDownList(
+                            $repository->getRawTypesList(),
+                            ['prompt' => 'Выберите параметр'],
+                        );
+                    ?>
+                </div>
+                <div class="mb-3">
+                    <?=
+                    $form->field($model, 'tonnage')
+                        ->dropDownList(
+                            $repository->getTonnagesList(),
+                            ['prompt' => 'Выберите параметр'],
+                        );
+                    ?>
+                </div>
             </div>
-            <div class="col-lg-4 mb-3">
-                <h2>Heading</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+            <?= Html::submitButton($content = "Рассчитать", ["class" => "btn btn-success"]) ?>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+            <?php \yii\widgets\ActiveForm::end() ?>
+
+            <?php
+            if (!empty($model->raw_type)){
+            ?>
+            <div class="row">
+                <div class="col-md-4 mt-2 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            Введенные данные:
+                            <?php foreach ($model->getAttributes() as $key => $attribute): ?>
+                                <div>
+                                    <?= $model->getAttributeLabel($key) ?>: <strong><?= $attribute ?></strong>
+                                </div>
+                            <?php endforeach ?>
+                            <div>
+                                Итог, руб. :
+                                <strong> <?= $repository->getPrice($model->raw_type, $model->month, $model->tonnage) ?> </strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <th>
+                        Месяц/Тоннаж
+                    </th>
+                    <?php
+                    foreach ($repository->getTonnagesByRawTypeAndMonth($model->raw_type, $model->month) as $tonnages):?>
+                        <th>
+                            <?= $tonnages ?>
+                        </th>
+                    <?php endforeach ?>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($repository->getMonthsByRawType($model->raw_type) as $month): ?>
+                        <tr>
+                            <td>
+                                <?= $month ?>
+                            </td>
+                            <?php foreach ($repository->getPriceByRawTypeAndMonth($model->raw_type, $month) as $price): ?>
+                                <td>
+                                    <?= $price ?>
+                                </td>
+                            <?php endforeach ?>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
             </div>
-        </div>
-
+        </fieldset>
     </div>
 </div>
+<?php } ?>
+

@@ -9,15 +9,15 @@ class ProcessController extends \yii\console\Controller
 {
     public function actionQueueResult()
     {
-        $bathfile = Yii::getAlias('runtime/queue.job');
+        $filePath = Yii::getAlias('runtime/queue.job');
 
         $counter = 1;
 
         while (true) {
             echo "Счетчик " . $counter++, PHP_EOL;
-            if (file_exists($bathfile)) {
-                echo file_get_contents($bathfile);
-                unlink($bathfile);
+            if (file_exists($filePath)) {
+                echo file_get_contents($filePath);
+                unlink($filePath);
             }
             sleep(2);
         }
