@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\PricesRepository;
 
 class SiteController extends Controller
 {
@@ -49,105 +49,27 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
+    //Calculator page
     public function actionIndex()
     {
-        return $this->render('index.php');
-    }
-
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
-    /**
-     *  Displays calculator form
-     */
-
-    public function actionCalculator()
-    {
-        $bathfile = Yii::getAlias('../runtime/queue.job');
+        $filePath = Yii::getAlias('../runtime/queue.job');
 
         $model = new CalculatorForm;
+        $repository = new PricesRepository(\Yii::$app->params['prices']);
 
         if ($model->load(Yii::$app->request->post())) {
 
-            if (file_exists($bathfile)) {
-                unlink($bathfile);
+            if (file_exists($filePath)) {
+                unlink($filePath);
             }
 
             foreach ($model->getAttributes() as $key => $value) {
-                file_put_contents($bathfile, "$key => $value \n", FILE_APPEND);
+                file_put_contents($filePath, "$key => $value \n", FILE_APPEND);
             }
         }
-        return $this->render('calculator', ['model' => $model]);
+        return $this->render('index', ['model' => $model, 'repository' => $repository]);
     }
 }
