@@ -11,6 +11,10 @@ class PricesRepository
         $this->prices = $prices;
     }
 
+    public function getPrices(){
+        return $this->prices;
+    }
+
     public function getMonthsList()
     {
         return [
