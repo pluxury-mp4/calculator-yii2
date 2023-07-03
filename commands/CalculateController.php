@@ -25,8 +25,9 @@ class CalculateController extends Controller
         }
 
         if (!empty($missingParams)) {
-            echo "Выполнение команды завершено с ошибкой" . PHP_EOL .
-                "Необходимо ввести " . implode(", ", $missingParams);
+
+            $this->stdout("Выполнение команды завершено с ошибкой" . PHP_EOL .
+                "Необходимо ввести " . implode(", ", $missingParams), Console::FG_RED);
             return ExitCode::DATAERR;
         }
 
@@ -44,9 +45,9 @@ class CalculateController extends Controller
         }
 
         if (!empty($incorrectData)) {
-            echo "Выполнение команды завершено с ошибкой" . PHP_EOL .
+            $this->stdout("Выполнение команды завершено с ошибкой" . PHP_EOL .
                 implode(PHP_EOL, $incorrectData) . PHP_EOL .
-                "проверьте корректность введенных значений";
+                "проверьте корректность введенных значений", Console::FG_RED);
             return ExitCode::DATAERR;
         }
 
@@ -76,7 +77,7 @@ class CalculateController extends Controller
         foreach ($tonnagesArr as $tonnage) {
             $row = [$tonnage];
             foreach ($monthsArr as $month) {
-                $row[] = $prices[$raw_type][$month][$tonnage];
+                $row[] = Console::ansiFormat($prices[$raw_type][$month][$tonnage],[Console::FG_GREEN]);
             }
             $table->addRow($row);
         }
