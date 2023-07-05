@@ -18,52 +18,27 @@ class ApiController extends Controller
             if ($model->load(\Yii::$app->request->get(), '')) {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-
-                $outListType = true;
-                foreach ($repository->getRawTypesList() as $raw_type) {
-
-                    if (empty($model->raw_type)) {
-                        throw new BadRequestHttpException('Не задан параметр \'Тип сырья\'');
-                    }
-
-                    if ($model->raw_type === $raw_type) {
-                        $outListType = false;
-                    }
-
+                if (empty($model->raw_type)) {
+                    throw new BadRequestHttpException('Не задан параметр \'Тип сырья\'');
                 }
-                if ($outListType) {
+
+                if(in_array($model->raw_type,$repository->getRawTypesList()) === false){
                     throw new BadRequestHttpException('Параметр \'Тип сырья\' не найден в таблице');
                 }
 
-                $outListMonth = true;
-                foreach ($repository->getMonthsList() as $month) {
-
-                    if (empty($model->month)) {
-                        throw new BadRequestHttpException('Не задан параметр \'Месяц\'');
-                    }
-
-                    if ($model->month == $month) {
-                        $outListMonth = false;
-                    }
-
+                
+                if (empty($model->month)) {
+                    throw new BadRequestHttpException('Не задан параметр \'Месяц\'');
                 }
-                if ($outListMonth) {
-                    throw new BadRequestHttpException('Параметр \'Месяц\' не найден в таблице');
+               if(in_array($model->month,$repository->getMonthsList()) === false){
+                throw new BadRequestHttpException('Параметр \'Месяц\' не найден в таблице');
+               }
+
+               if (empty($model->tonnage)) {
+                throw new BadRequestHttpException('Не задан параметр \'Тоннаж\'');
                 }
-
-                $outListTonnage = true;
-                foreach ($repository->getTonnagesList() as $tonnage) {
-
-                    if (empty($model->tonnage)) {
-                        throw new BadRequestHttpException('Не задан параметр \'Тоннаж\'');
-                    }
-
-                    if ($model->tonnage === $tonnage) {
-                        $outListTonnage = false;
-                    }
-
-                }
-                if ($outListTonnage) {
+            
+                if (in_array($model->tonnage,$repository->getTonnagesList()) === false) {
                     throw new BadRequestHttpException('Параметр \'Тоннаж\' не найден в таблице');
                 }
             }
@@ -71,7 +46,6 @@ class ApiController extends Controller
         } catch (BadRequestHttpException $e) {
             return [
                 'error' => $e->getMessage(),
-                'price_list' => $repository->getPrices(),
             ];
         }
         return [
