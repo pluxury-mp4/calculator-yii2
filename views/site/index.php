@@ -4,15 +4,14 @@ use yii\helpers\Html;
 
 $this->title = "Calculator";
 
-$form = \yii\widgets\ActiveForm::begin();
+$form = \yii\bootstrap5\ActiveForm::begin();
 ?>
-<div class="container mt-2">
+<div class="container mt-2 w-75">
+    <h2>
+        Калькулятор стоимости доставки сырья
+    </h2>
     <div class="d-flex justify-content-center">
         <fieldset class="form-control" id="disabledInput" type="text" placeholder="Disabled input here...">
-            <h2>
-                Калькулятор стоимости доставки сырья
-            </h2>
-
             <div>
                 <div class="mb-3">
                     <?=
@@ -46,13 +45,13 @@ $form = \yii\widgets\ActiveForm::begin();
 
             <?= Html::submitButton($content = "Рассчитать", ["class" => "btn btn-success"]) ?>
 
-            <?php \yii\widgets\ActiveForm::end() ?>
+            <?php \yii\bootstrap5\ActiveForm::end() ?>
 
             <?php
             if (!empty($model->raw_type)){
             ?>
             <div class="row">
-                <div class="col-md-4 mt-2 mb-2">
+                <div class="col-md-5 mt-2 mb-2">
                     <div class="card">
                         <div class="card-body">
                             Введенные данные:
