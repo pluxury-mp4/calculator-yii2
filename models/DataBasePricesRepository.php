@@ -48,7 +48,7 @@ class DataBasePricesRepository
             ->groupBy(['month_id', 'tonnage_id'])->column();
     }
 
-    public function getAllPrices($raw_type_value)
+    public function getAllPrices(string $raw_type)
     {
             $query = (new Query())
                 ->select(['tonnages.value','months.name','prices.price'])
@@ -56,7 +56,7 @@ class DataBasePricesRepository
                 ->innerJoin('tonnages', 'tonnages.id = prices.tonnage_id')
                 ->innerJoin('months', 'months.id = prices.month_id')
                 ->innerJoin('raw_types', 'raw_types.id = prices.raw_type_id')
-                ->where(['raw_types.name' => $raw_type_value])
+                ->where(['raw_types.name' => $raw_type])
                 ->orderBy(['months.id' => SORT_ASC, 'tonnages.id' => SORT_ASC])
                 ->all();
 
