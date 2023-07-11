@@ -6,18 +6,19 @@ $this->title = "Calculator";
 
 $form = \yii\bootstrap5\ActiveForm::begin();
 ?>
+
 <div class="container mt-2 w-75">
     <h2>
         Калькулятор стоимости доставки сырья
     </h2>
     <div class="d-flex justify-content-center">
-        <fieldset class="form-control" id="disabledInput" type="text" placeholder="Disabled input here...">
+        <fieldset class="form-control">
             <div>
                 <div class="mb-3">
                     <?=
                     $form->field($model, 'month')->
                     dropDownList(
-                        $repository->getMonthsList(),
+                        $repository->getMonthsListFromDb(),
                         ['prompt' => 'Выберите параметр']
                     );
                     ?>
@@ -27,7 +28,7 @@ $form = \yii\bootstrap5\ActiveForm::begin();
                     <?=
                     $form->field($model, 'raw_type')
                         ->dropDownList(
-                            $repository->getRawTypesList(),
+                            $repository->getRawTypesListFromDb(),
                             ['prompt' => 'Выберите параметр'],
                         );
                     ?>
@@ -36,7 +37,7 @@ $form = \yii\bootstrap5\ActiveForm::begin();
                     <?=
                     $form->field($model, 'tonnage')
                         ->dropDownList(
-                            $repository->getTonnagesList(),
+                            $repository->getTonnagesListFromDb(),
                             ['prompt' => 'Выберите параметр'],
                         );
                     ?>
@@ -62,12 +63,14 @@ $form = \yii\bootstrap5\ActiveForm::begin();
                             <?php endforeach ?>
                             <div>
                                 Итог, руб. :
-                                <strong> <?= $repository->getPrice($model->raw_type, $model->month, $model->tonnage) ?> </strong>
+                                <strong> <?= $repository->getPriceFromDb($model->raw_type, $model->month, $model->tonnage) ?> </strong>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -75,30 +78,30 @@ $form = \yii\bootstrap5\ActiveForm::begin();
                         Месяц/Тоннаж
                     </th>
                     <?php
-                    foreach ($repository->getTonnagesByRawTypeAndMonth($model->raw_type, $model->month) as $tonnages):?>
+                    foreach ($repository->getTonnagesListFromDb() as $tonnages):?>
                         <th>
                             <?= $tonnages ?>
                         </th>
                     <?php endforeach ?>
                     </thead>
                     <tbody>
-                    <?php foreach ($repository->getMonthsByRawType($model->raw_type) as $month): ?>
+                    <?php foreach ($repository->getMonthsListFromDb() as $month): ?>
                         <tr>
                             <td>
                                 <?= $month ?>
                             </td>
-                            <?php foreach ($repository->getPriceByRawTypeAndMonth($model->raw_type, $month) as $price): ?>
+                            <?php foreach ($repository->getPriceArrayFromDb($model->raw_type, $month) as $price): ?>
                                 <td>
                                     <?= $price ?>
                                 </td>
                             <?php endforeach ?>
                         </tr>
-                    <?php endforeach ?>
+                    <?php endforeach;
+                    } ?>
                     </tbody>
                 </table>
             </div>
         </fieldset>
     </div>
 </div>
-<?php } ?>
 
