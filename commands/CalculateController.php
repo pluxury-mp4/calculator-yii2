@@ -2,16 +2,18 @@
 
 namespace app\commands;
 
+use app\models\DataBasePricesRepository;
 use LucidFrame\Console\ConsoleTable;
 use yii\console\Controller;
 use yii\console\ExitCode;
+use yii\db\Query;
 use yii\helpers\Console;
 
 class CalculateController extends Controller
 {
     public function actionIndex($raw_type = "", $month = "", $tonnage = 0)
     {
-
+        $repository = new DataBasePricesRepository();
         $missingParams = [];
 
         if (empty($raw_type)) {
@@ -32,15 +34,15 @@ class CalculateController extends Controller
         }
 
         $incorrectData = [];
-        if (!isset(\Yii::$app->params['prices'][$raw_type])) {
+        if (in_array($raw_type, $repository->getRawTypesListFromDb()) === false) {
             $incorrectData[] = "Не найден прайс для значения $raw_type";
         }
 
-        if (!isset(\Yii::$app->params['prices'][$raw_type][$month])) {
+        if (in_array($month, $repository->getMonthsListFromDb()) === false) {
             $incorrectData[] = "Не найден прайс для значения $month";
         }
 
-        if (!isset(\Yii::$app->params['prices'][$raw_type][$month][$tonnage])) {
+        if (in_array($tonnage, $repository->getTonnagesListFromDb()) === false) {
             $incorrectData[] = "Не найден прайс для значения $tonnage";
         }
 
@@ -53,31 +55,27 @@ class CalculateController extends Controller
 
         echo "Тип - $raw_type" . PHP_EOL .
             "Месяц - $month" . PHP_EOL .
-            "Тоннаж - $tonnage" . PHP_EOL;
+            "Тоннаж - $tonnage" . PHP_EOL .
+            "Результат - " . $repository->getPriceFromDb($raw_type, $month, $tonnage) . PHP_EOL;
 
-        print_r("Результат - " . \Yii::$app->params['prices'][$raw_type][$month][$tonnage]);
-
-        echo PHP_EOL;
-
-        $this->drawTable(\Yii::$app->params['prices'], $raw_type);
+        $this->drawTable($raw_type);
 
         return ExitCode::OK;
     }
 
-    public function drawTable(array $prices, string $raw_type)
+    public function drawTable(string $raw_type)
     {
-
+        $repository = new DataBasePricesRepository();
         $table = new ConsoleTable();
 
-        $monthsArr = array_keys($prices[$raw_type]);
-        $tonnagesArr = array_keys($prices[$raw_type][$monthsArr[0]]);
+        $monthsHeaders = (new Query())->select('name')->groupBy('id')->from('months')->column();
 
-        $table->setHeaders(array_merge(['М/Т'], $monthsArr));
+        $table->setHeaders(array_merge(['М/Т'], $monthsHeaders));
 
-        foreach ($tonnagesArr as $tonnage) {
+        foreach ($repository->getTonnagesListFromDb() as $tonnage) {
             $row = [$tonnage];
-            foreach ($monthsArr as $month) {
-                $row[] = Console::ansiFormat($prices[$raw_type][$month][$tonnage],[Console::FG_GREEN]);
+            foreach ($repository->getMonthsListFromDb() as $month) {
+                $row[] = Console::ansiFormat($repository->getPriceFromDb($raw_type, $month, $tonnage), [Console::FG_GREEN]);
             }
             $table->addRow($row);
         }

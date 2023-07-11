@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\CalculatorForm;
+use app\models\DataBasePricesRepository;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -58,7 +59,7 @@ class SiteController extends Controller
         $filePath = Yii::getAlias('../runtime/queue.job');
 
         $model = new CalculatorForm;
-        $repository = new PricesRepository(\Yii::$app->params['prices']);
+        $repository = new DataBasePricesRepository();
 
         if ($model->load(Yii::$app->request->post())) {
 
