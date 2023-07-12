@@ -18,6 +18,13 @@ class m230709_101434_create_tonnages_table extends Migration
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull(),
             'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->append('ON UPDATE CURRENT_TIMESTAMP')->notNull(),
         ]);
+
+        $this->batchInsert('tonnages', ['value'], [
+            ['25'],
+            ['50'],
+            ['75'],
+            ['100'],
+        ]);
     }
 
     /**
