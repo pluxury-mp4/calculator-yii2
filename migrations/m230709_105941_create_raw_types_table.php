@@ -18,6 +18,12 @@ class m230709_105941_create_raw_types_table extends Migration
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull(),
             'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->append('ON UPDATE CURRENT_TIMESTAMP')
         ]);
+
+        $this->batchInsert('raw_types', ['name'], [
+            ['Шрот'],
+            ['Жмых'],
+            ['Соя'],
+        ]);
     }
 
     /**

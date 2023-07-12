@@ -18,6 +18,15 @@ class m230709_105458_create_months_table extends Migration
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull(),
             'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull()->append('ON UPDATE CURRENT_TIMESTAMP')
         ]);
+
+        $this->batchInsert('months', ['name'], [
+            ['Январь'],
+            ['Февраль'],
+            ['Август'],
+            ['Сентябрь'],
+            ['Октябрь'],
+            ['Ноябрь'],
+        ]);
     }
 
     /**
