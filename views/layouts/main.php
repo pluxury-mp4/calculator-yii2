@@ -38,17 +38,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Расчет доставки', 'url' => ['index']],
-//            Yii::$app->user->isGuest
-//                ? ['label' => 'Login', 'url' => ['login/index']]
-//                : '<li class="nav-item">'
-//                    . Html::beginForm(['/site/logout'])
-//                    . Html::submitButton(
-//                        'Logout (' . Yii::$app->user->identity->username . ')',
-//                        ['class' => 'nav-link btn btn-link logout']
-//                    )
-//                    . Html::endForm()
-//                    . '</li>'
+            ['label' => 'Расчет доставки', 'url' => ['site/index']],
+            Yii::$app->user->isGuest
+                ? ['label' => 'Login', 'url' => ['login/login']]
+                : '<li class="nav-item">'
+                    . Html::beginForm(['/site/logout'])
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'nav-link btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>'
         ]
     ]);
     NavBar::end();
@@ -75,9 +75,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <!--Disable debug toolbar-->
 <?php
-if (class_exists('yii\debug\Module')) {
-    $this->off(\yii\web\View::EVENT_END_BODY, [\yii\debug\Module::getInstance(), 'renderToolbar']);
-}
+//if (class_exists('yii\debug\Module')) {
+//    $this->off(\yii\web\View::EVENT_END_BODY, [\yii\debug\Module::getInstance(), 'renderToolbar']);
+//}
 
 $this->endBody() ?>
 

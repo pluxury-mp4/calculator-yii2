@@ -48,6 +48,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'index' => 'site/index',
+                'login' => 'login/login'
             ],
         ],
 

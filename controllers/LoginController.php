@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\LoginForm;
+use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -26,7 +27,7 @@ class LoginController extends Controller
         }
 
         $model->password = '';
-        return $this->render('login/index', [
+        return $this->render('index', [
             'model' => $model,
         ]);
     }

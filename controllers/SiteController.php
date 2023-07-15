@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\CalculatorForm;
 use app\models\DataBasePricesRepository;
 use Yii;
+use yii\bootstrap5\ActiveForm;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -60,6 +61,11 @@ class SiteController extends Controller
 
         $model = new CalculatorForm;
         $repository = new DataBasePricesRepository();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 
