@@ -62,11 +62,6 @@ class SiteController extends Controller
         $model = new CalculatorForm;
         $repository = new DataBasePricesRepository();
 
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
-
         if ($model->load(Yii::$app->request->post())) {
 
             if (file_exists($filePath)) {
@@ -77,6 +72,21 @@ class SiteController extends Controller
                 file_put_contents($filePath, "$key => $value \n", FILE_APPEND);
             }
         }
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            return $this->renderAjax('result', ['model'=>$model,'repository'=>$repository]);
+        }
+
         return $this->render('index', ['model' => $model, 'repository' => $repository]);
+    }
+
+    public function actionValidation()
+    {
+        $model = new CalculatorForm();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
     }
 }
