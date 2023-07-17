@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
 
 $this->title = "Calculator";
 $form = \yii\bootstrap5\ActiveForm::begin([
