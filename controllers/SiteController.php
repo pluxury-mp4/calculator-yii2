@@ -4,14 +4,14 @@ namespace app\controllers;
 
 use app\models\CalculatorForm;
 use app\models\DataBasePricesRepository;
+use app\models\User;
 use Yii;
 use yii\bootstrap5\ActiveForm;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\PricesRepository;
 
 class SiteController extends Controller
 {
@@ -24,10 +24,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout'],
+                'only'=>['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout, profile'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -58,9 +58,28 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $filePath = Yii::getAlias('../runtime/queue.job');
+        $session = Yii::$app->session;
 
         $model = new CalculatorForm;
         $repository = new DataBasePricesRepository();
+
+        // Проверяем, авторизован ли пользователь
+        if (!Yii::$app->user->isGuest) {
+            // Проверяем, было ли уже показано уведомление пользователю
+            if (!$session->has('alertShowed')) {
+                $session->set('alertShowed', true);
+
+                // Получаем имя пользователя
+                $username = Yii::$app->user->identity->username;
+
+                // Выводим сообщение и ссылку на журнал расчетов
+                Yii::$app->session->addFlash('success', "Здравствуйте, 
+                $username, вы авторизовались в системе расчета стоимости доставки. 
+                Теперь все ваши расчеты будут сохранены для последующего просмотра в " .
+                    '<a class="alert-link" href="' . Url::to(['/calculation/history']) .
+                    '">журнале расчетов</a>');
+            }
+        }
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -74,7 +93,7 @@ class SiteController extends Controller
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            return $this->renderAjax('result', ['model'=>$model,'repository'=>$repository]);
+            return $this->renderAjax('result', ['model' => $model, 'repository' => $repository]);
         }
 
         return $this->render('index', ['model' => $model, 'repository' => $repository]);
@@ -88,5 +107,11 @@ class SiteController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
+    }
+
+    public function actionProfile()
+    {
+        if (Yii::$app->user->isGuest) return $this->goHome();
+        return $this->render('profile');
     }
 }

@@ -33,22 +33,21 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <header id="header">
     <?php
     NavBar::begin([
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top '],
+        'brandLabel' => 'Расчет доставки',
     ]);
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
+        'options' => ['class' => 'navbar-nav ms-auto mb-2 mb-lg-0'],
         'items' => [
-            ['label' => 'Расчет доставки', 'url' => ['site/index']],
             Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['login/login']]
-                : '<li class="nav-item">'
-                    . Html::beginForm(['login/logout'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
+                ? ['label' => 'Войти в систему', 'url' => ['login/login']]
+                : ['label' => Yii::$app->user->identity->username, 'items' => [
+                ['label' => 'Профиль', 'url' => ['/site/profile']],
+                ['label' => 'История расчетов', 'url' => ['/calculation/history']],
+                ['label' => 'Пользователи', 'url' => ['/users/index'], 'visible' => Yii::$app->user->can('administrator')],
+                ['label' => 'Выход', 'url' => ['/login/logout']],
+            ]],
+
         ]
     ]);
     NavBar::end();

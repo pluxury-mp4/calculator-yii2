@@ -49,6 +49,3 @@
         </tbody>
     </table>
 </div>
-</fieldset>
-</div>
-</div>
