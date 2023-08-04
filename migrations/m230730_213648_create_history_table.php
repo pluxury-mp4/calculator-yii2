@@ -20,7 +20,7 @@ class m230730_213648_create_history_table extends Migration
             'month' => $this->string(15)->notNull(),
             'raw_type' => $this->string(15)->notNull(),
             'price' => $this->integer(3)->notNull(),
-            'snapshot' => $this->json()->notNull(),
+            'snapshot' => $this->text()->notNull(),
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP')->notNull(),
         ]);
     }
