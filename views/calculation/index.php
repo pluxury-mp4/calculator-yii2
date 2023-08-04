@@ -16,6 +16,8 @@ $this->title='История расчетов'
         'tableOptions' => [
                 'class' => 'table table-striped table-hover shadow-sm '
         ],
+        'layout'=>"{summary}\n{items}\n{pager}",
+        'pager'=>['class'=>'yii\bootstrap5\LinkPager'],
         'columns' => [
             'id',
             ['visible' => Yii::$app->user->can('administrator'),
@@ -36,6 +38,7 @@ $this->title='История расчетов'
                 ]
             ],
         ],
+
 
 
     ]);

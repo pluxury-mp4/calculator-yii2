@@ -2,17 +2,21 @@
 
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\widgets\Pjax;
+
 $this->title='Управление пользователями'
 ?>
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+<?php Pjax::begin(); ?>
 <?= GridView::widget([
-
+    'filterModel' => $searchModel,
+    'dataProvider' => $dataProvider,
     'tableOptions' => [
         'class' => 'table table-striped table-hover shadow-sm '
     ],
-    'dataProvider' => $dataProvider,
+    'layout'=>"{summary}\n{items}\n{pager}",
+    'pager'=>['class'=>'yii\bootstrap5\LinkPager'],
     'columns' => [
         'id',
         ['attribute'=>'username', 'label' => 'Имя пользователя'],
@@ -25,3 +29,4 @@ $this->title='Управление пользователями'
         ],
     ],
 ]) ?>
+<?php Pjax::end(); ?>

@@ -4,9 +4,13 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
+    'language' => 'ru-RU',
     'modules' => [
         'admin' => [
             'class' => 'mdm\admin\Module',
+            'layout'=>'left-menu',
+            'mainLayout'=>'@app/views/layouts/main.php',
+            'menus'=>['user' => null],
             'controllerMap' => [
                 'assignment' => [
                     'class' => 'mdm\admin\controllers\AssignmentController',
@@ -24,19 +28,6 @@ $config = [
     'components' => [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
-        ],
-        'as access' => [
-            'class' => 'mdm\admin\components\AccessControl',
-            'allowActions' => [
-                'site/*',
-                'admin/*',
-                'calculation/*',
-                // The actions listed here will be allowed to everyone including guests.
-                // So, 'admin/*' should not appear here in the production, of course.
-                // But in the earlier stages of your development, you may probably want to
-                // add a lot of actions here until you finally completed setting up rbac,
-                // otherwise you may not even take a first step.
-            ]
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -83,6 +74,19 @@ $config = [
             ],
         ],
 
+    ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'login/*',
+            'site/*',
+            'calculation/*',
+            // The actions listed here will be allowed to everyone including guests.
+            // So, 'admin/*' should not appear here in the production, of course.
+            // But in the earlier stages of your development, you may probably want to
+            // add a lot of actions here until you finally completed setting up rbac,
+            // otherwise you may not even take a first step.
+        ]
     ],
     'params' => $params,
 ];

@@ -19,14 +19,16 @@ class CalculationController extends Controller
         $searchModel = new HistorySearch();
 
 
-
+        if (Yii::$app->user->isGuest) {
+        throw new ForbiddenHttpException('Доступ запрещен');
+        }
         if (Yii::$app->user->can('administrator')) {
             $dataProvider = $searchModel->search(Yii::$app->request->get());
         } else {
             $dataProvider = $searchModel->userSearch(Yii::$app->request->get());
         }
 
-        return $this->render('index', compact( 'dataProvider','searchModel'));
+        return $this->render('index', compact('dataProvider', 'searchModel'));
     }
 
     public function actionSave()
@@ -48,9 +50,6 @@ class CalculationController extends Controller
             'price' => $price,
         ]);
         $calculation->save();
-
-        Yii::$app->response->format = Response::FORMAT_JSON; //мб не надо
-        return ['success' => true, 'price' => $price]; //мб тоже не надо
     }
 
     public function actionView($id)
@@ -72,9 +71,5 @@ class CalculationController extends Controller
             $calculation->delete();
             return $this->redirect('index');
         }
-        return ['success' => true];
     }
-
-
-
 }

@@ -17,9 +17,15 @@ class m230718_122752_create_user_table extends Migration
             'username' => $this->string()->notNull(),
             'password' => $this->string()->notNull(),
             'email' => $this->string()->notNull()->unique(),
-            'created_at' => $this->date('y-m-d H:i:s')->notNull(),
-            'updated_at' => $this->date('y-m-d H:i:s')->notNull(),
+            'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'updated_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP')->append('ON UPDATE CURRENT_TIMESTAMP()'),
         ]);
+
+        $this->batchInsert('{{%user}}', ['username', 'password', 'email'], [
+            ['Администратор', 'administrator1@gmail.com', Yii::$app->security->generatePasswordHash('administrator1')],
+            ['Пользователь', 'user123@gmail.com', Yii::$app->security->generatePasswordHash('user123')],
+        ]);
+
     }
 
     /**

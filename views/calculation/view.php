@@ -2,7 +2,7 @@
 
 use yii\bootstrap5\Html;
 use yii\widgets\DetailView;
-
+$this->title='Расчет'
 ?>
 
 <div class="container">

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
-
+$this->title='Изменение пользователя'
 ?>
 
 
@@ -12,7 +12,7 @@ use yii\bootstrap5\ActiveForm;
 <div class="d-flex justify-content-center align-items-center" style="min-height: 75vh;">
 
     <div class="shadow  p-5 bg-body rounded-3">
-        <h1>Изменение пользователя</h1>
+        <h1><?= Html::encode($this->title) ?></h1>
             <div>
                 <div class="mb-3">
                     <?= $form->field($model, 'username')->textInput() ?>
@@ -23,7 +23,7 @@ use yii\bootstrap5\ActiveForm;
             </div>
 
         <?= Html::a( 'Отмена', Yii::$app->request->referrer, ['class' => 'btn btn-danger me-3']); ?>
-            <?= Html::resetButton($content = "Сохранить", ['id' => 'save-button', 'class' => 'btn btn-success']) ?>
+            <?= Html::submitButton($content = "Сохранить", ['id' => 'save-button', 'class' => 'btn btn-success']) ?>
 
             <?php \yii\bootstrap5\ActiveForm::end() ?>
 

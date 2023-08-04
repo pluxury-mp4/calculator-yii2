@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\UpdateForm;
+use app\models\UserSearch;
 use Yii;
 use yii\web\Controller;
 use app\models\User;
@@ -28,13 +29,10 @@ class UsersController extends Controller
     // Просмотр всех пользователей
     public function actionIndex()
     {
-        $dataProvider = new \yii\data\ActiveDataProvider([
-            'query' => User::find(),
-        ]);
+        $searchModel = new UserSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->get());
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render('index', compact('dataProvider','searchModel'));
     }
 
     // Изменение пользователя

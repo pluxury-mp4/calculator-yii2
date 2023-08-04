@@ -4,7 +4,7 @@ use yii\bootstrap5\Alert;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = "Calculator";
+$this->title = "Калькулятор";
 $form = \yii\bootstrap5\ActiveForm::begin([
     'id' => 'calculator-form',
     'validationUrl' => Url::toRoute('site/validation'),

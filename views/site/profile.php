@@ -1,5 +1,5 @@
 <?php
-
+$this->title='Профиль'
 ?>
 <div class="d-flex justify-content-center align-items-center " style="min-height: 75vh">
     <div class="shadow p-5 mb-3 bg-body rounded-3 w-75">

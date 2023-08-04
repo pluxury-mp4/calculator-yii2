@@ -49,6 +49,30 @@ class RoleController extends Controller
         $auth->addChild($user,$readOwnSnapshot);
         $auth->addChild($readOwnSnapshot,$readSnapshot);
 
+        $userRoutes = [
+            '/site/*',
+
+            '/calculate/index',
+            '/calculate/view',
+//            '/history/error',
+
+            '/site/profile',
+            '/login/logout',
+        ];
+
+        foreach ($userRoutes as $route) {
+            $permission = $auth->createPermission($route);
+            $auth->add($permission);
+            $auth->addChild($user, $permission);
+        }
+
+        $adminRoutes = $auth->createPermission('/*');
+        $auth->add($adminRoutes);
+        $auth->addChild($administrator, $adminRoutes);
+
+        $auth->assign($administrator,1);
+        $auth->assign($user,2);
+
 //        $canAdmin = $auth->createPermission('canAdmin');
 //        $canAdmin->description = 'Доступ к админ-панели';
 //        $auth->add($canAdmin);

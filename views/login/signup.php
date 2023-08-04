@@ -12,9 +12,7 @@ $form = \yii\bootstrap5\ActiveForm::begin([
 
 <div class="d-flex justify-content-center align-items-center" style="min-height: 75vh;">
     <div class="shadow  p-5 mb-5 bg-body rounded-3">
-    <h1>
-        Регистрация
-    </h1>
+        <h1><?= Html::encode($this->title) ?></h1>
 
     <p>Пожалуйста, заполните следующие поля для регистрации в системе:</p>
 
