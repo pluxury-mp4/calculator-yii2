@@ -2,11 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\SignupForm;
 use app\models\UpdateForm;
 use app\models\UserSearch;
 use Yii;
+use yii\bootstrap5\ActiveForm;
 use yii\web\Controller;
 use app\models\User;
+use yii\web\Response;
 
 class UsersController extends Controller
 {
@@ -30,9 +33,9 @@ class UsersController extends Controller
     public function actionIndex()
     {
         $searchModel = new UserSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->get());
+        $dataProvider = $searchModel->search(Yii::$app->request->get());
 
-        return $this->render('index', compact('dataProvider','searchModel'));
+        return $this->render('index', compact('dataProvider', 'searchModel'));
     }
 
     // Изменение пользователя
@@ -54,11 +57,41 @@ class UsersController extends Controller
         }
 
 
-
         return $this->render('update', [
             'user' => $user,
-            'model'=>$model
+            'model' => $model
         ]);
+    }
+
+    public function actionCreate()
+    {
+        $model = new SignupForm();
+        $user = new User();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(\Yii::$app->request->post())) {
+
+            $user->email = $model->email;
+            $user->username = $model->username;
+            $user->password = \Yii::$app->security->generatePasswordHash($model->password);
+            $user->created_at = date('y-m-d H:i:s');
+            $user->updated_at = date('y-m-d H:i:s');
+            $user->save(false);
+
+            $auth = Yii::$app->authManager;
+            $userRole = $auth->getRole('user');
+            $auth->assign($userRole, $user->getId());
+
+            if ($user->save()) {
+                $this->redirect(['index']);
+            }
+        }
+
+        return $this->render('create', ['model' => $model]);
     }
 
     // Удаление пользователя
@@ -74,4 +107,5 @@ class UsersController extends Controller
         return $this->redirect(['index']);
     }
 }
+
 ?>

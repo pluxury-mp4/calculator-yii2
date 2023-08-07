@@ -63,7 +63,6 @@ class SiteController extends Controller
         $model = new CalculatorForm;
         $repository = new DataBasePricesRepository();
 
-        // Проверяем, авторизован ли пользователь
         if (!Yii::$app->user->isGuest) {
             // Проверяем, было ли уже показано уведомление пользователю
             if (!$session->has('alertShowed')) {

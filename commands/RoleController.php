@@ -54,7 +54,6 @@ class RoleController extends Controller
 
             '/calculate/index',
             '/calculate/view',
-//            '/history/error',
 
             '/site/profile',
             '/login/logout',
