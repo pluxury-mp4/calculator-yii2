@@ -33,22 +33,21 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <header id="header">
     <?php
     NavBar::begin([
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top '],
+        'brandLabel' => 'Расчет доставки',
     ]);
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
+        'options' => ['class' => 'navbar-nav ms-auto mb-2 mb-lg-0'],
         'items' => [
-            ['label' => 'Расчет доставки', 'url' => ['index']],
-//            Yii::$app->user->isGuest
-//                ? ['label' => 'Login', 'url' => ['login/index']]
-//                : '<li class="nav-item">'
-//                    . Html::beginForm(['/site/logout'])
-//                    . Html::submitButton(
-//                        'Logout (' . Yii::$app->user->identity->username . ')',
-//                        ['class' => 'nav-link btn btn-link logout']
-//                    )
-//                    . Html::endForm()
-//                    . '</li>'
+            Yii::$app->user->isGuest
+                ? ['label' => 'Войти в систему', 'url' => ['login/login']]
+                : ['label' => Yii::$app->user->identity->username, 'items' => [
+                ['label' => 'Профиль', 'url' => ['/site/profile']],
+                ['label' => 'История расчетов', 'url' => ['/calculation/history']],
+                ['label' => 'Пользователи', 'url' => ['/users/index'], 'visible' => Yii::$app->user->can('administrator')],
+                ['label' => 'Выход', 'url' => ['/login/logout']],
+            ]],
+
         ]
     ]);
     NavBar::end();
@@ -75,9 +74,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <!--Disable debug toolbar-->
 <?php
-if (class_exists('yii\debug\Module')) {
-    $this->off(\yii\web\View::EVENT_END_BODY, [\yii\debug\Module::getInstance(), 'renderToolbar']);
-}
+//if (class_exists('yii\debug\Module')) {
+//    $this->off(\yii\web\View::EVENT_END_BODY, [\yii\debug\Module::getInstance(), 'renderToolbar']);
+//}
 
 $this->endBody() ?>
 

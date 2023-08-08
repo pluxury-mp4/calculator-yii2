@@ -1,107 +1,110 @@
 <?php
 
+use yii\bootstrap5\Alert;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
-$this->title = "Calculator";
+$this->title = "Калькулятор";
+$form = \yii\bootstrap5\ActiveForm::begin([
+    'id' => 'calculator-form',
+    'validationUrl' => Url::toRoute('site/validation'),
+    'enableAjaxValidation' =>true,
+]);
 
-$form = \yii\bootstrap5\ActiveForm::begin();
 ?>
 
-<div class="container mt-2 w-75">
+
+    <div class="container mt-2 w-75">
     <h2>
         Калькулятор стоимости доставки сырья
     </h2>
+
     <div class="d-flex justify-content-center">
-        <fieldset class="form-control">
-            <div>
-                <div class="mb-3">
-                    <?=
-                    $form->field($model, 'month')->
-                    dropDownList(
-                        $repository->getMonthsListFromDb(),
-                        ['prompt' => 'Выберите параметр']
-                    );
-                    ?>
-                </div>
-                <div class="mb-3">
-
-                    <?=
-                    $form->field($model, 'raw_type')
-                        ->dropDownList(
-                            $repository->getRawTypesListFromDb(),
-                            ['prompt' => 'Выберите параметр'],
-                        );
-                    ?>
-                </div>
-                <div class="mb-3">
-                    <?=
-                    $form->field($model, 'tonnage')
-                        ->dropDownList(
-                            $repository->getTonnagesListFromDb(),
-                            ['prompt' => 'Выберите параметр'],
-                        );
-                    ?>
-                </div>
-            </div>
-
-            <?= Html::submitButton($content = "Рассчитать", ["class" => "btn btn-success"]) ?>
-
-            <?php \yii\bootstrap5\ActiveForm::end() ?>
-
-            <?php
-            if (!empty($model->raw_type)){
+    <fieldset class="form-control">
+    <div>
+        <div class="mb-3">
+            <?=
+            $form->field($model, 'month')->
+            dropDownList(
+                $repository->getMonthsListFromDb(),
+                ['prompt' => 'Выберите параметр']
+            );
             ?>
-            <div class="row">
-                <div class="col-md-5 mt-2 mb-2">
-                    <div class="card">
-                        <div class="card-body">
-                            Введенные данные:
-                            <?php foreach ($model->getAttributes() as $key => $attribute): ?>
-                                <div>
-                                    <?= $model->getAttributeLabel($key) ?>: <strong><?= $attribute ?></strong>
-                                </div>
-                            <?php endforeach ?>
-                            <div>
-                                Итог, руб. :
-                                <strong> <?= $repository->getPriceFromDb($model->raw_type, $model->month, $model->tonnage) ?> </strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
+        <div class="mb-3">
 
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <th>
-                        Месяц/Тоннаж
-                    </th>
-                    <?php
-                    foreach ($repository->getTonnagesListFromDb() as $tonnages):?>
-                        <th>
-                            <?= $tonnages ?>
-                        </th>
-                    <?php endforeach ?>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($repository->getMonthsListFromDb() as $month): ?>
-                        <tr>
-                            <td>
-                                <?= $month ?>
-                            </td>
-                            <?php foreach ($repository->getPriceArrayFromDb($model->raw_type, $month) as $price): ?>
-                                <td>
-                                    <?= $price ?>
-                                </td>
-                            <?php endforeach ?>
-                        </tr>
-                    <?php endforeach;
-                    } ?>
-                    </tbody>
-                </table>
-            </div>
-        </fieldset>
+            <?=
+            $form->field($model, 'raw_type')
+                ->dropDownList(
+                    $repository->getRawTypesListFromDb(),
+                    ['prompt' => 'Выберите параметр'],
+                );
+            ?>
+        </div>
+        <div class="mb-3">
+            <?=
+            $form->field($model, 'tonnage')
+                ->dropDownList(
+                    $repository->getTonnagesListFromDb(),
+                    ['prompt' => 'Выберите параметр'],
+                );
+            ?>
+        </div>
     </div>
-</div>
+
+
+    <?= Html::submitButton($content = "Рассчитать", ['id' => 'calculate-button', 'class' => 'btn btn-success']) ?>
+
+    <?php \yii\bootstrap5\ActiveForm::end() ?>
+
+    <div id="result"></div>
+
+
+        <?php
+        $js = <<<JS
+
+$('#calculator-form').on('submit', function () {
+    var data = $('#calculator-form').serialize();
+    $.ajax({
+        url: '/site/index',
+        type: 'POST',
+        data: data,
+        success: function (response) {
+            $('#result').html(response);
+        },
+        error: function () {
+            //alert('Произошла ошибка ajax validation');
+        }
+    });
+    return false;
+});
+
+$('#calculate-button').on('click', function () {
+    var data = $('#calculator-form').serialize();
+    $.ajax({
+        url: '/calculation/save',
+        type: 'POST',
+        data: data,
+        success: function () {
+            //alert('Сохранено');
+        },
+        error: function () {
+            // alert('Ошибка при сохранении snapshot');
+        }
+    });
+});
+
+JS;
+
+        $this->registerJs($js);
+
+        ?>
+
+
+
+
+
+
+
+
 

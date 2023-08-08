@@ -27,12 +27,7 @@ class m230709_115553_create_prices_table extends Migration
             'updated_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP')->append('ON UPDATE CURRENT_TIMESTAMP'),
         ]);
 
-        // creates index for column `tonnage_id`
-        $this->createIndex(
-            '{{%idx-prices-tonnage_id}}',
-            '{{%prices}}',
-            'tonnage_id'
-        );
+
 
         // add foreign key for table `{{%tonnages}}`
         $this->addForeignKey(
@@ -45,12 +40,7 @@ class m230709_115553_create_prices_table extends Migration
             'NO ACTION',
         );
 
-        // creates index for column `month_id`
-        $this->createIndex(
-            '{{%idx-prices-month_id}}',
-            '{{%prices}}',
-            'month_id'
-        );
+
 
         // add foreign key for table `{{%months}}`
         $this->addForeignKey(
@@ -61,13 +51,6 @@ class m230709_115553_create_prices_table extends Migration
             'id',
             'CASCADE',
             'NO ACTION',
-        );
-
-        // creates index for column `raw_type_id`
-        $this->createIndex(
-            '{{%idx-prices-raw_type_id}}',
-            '{{%prices}}',
-            'raw_type_id'
         );
 
         // add foreign key for table `{{%raw_types}}`
