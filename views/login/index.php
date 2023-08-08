@@ -7,49 +7,55 @@
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+use yii\helpers\Url;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Авторизация';
+
+$form = \yii\bootstrap5\ActiveForm::begin([
+    'id' => 'signup-form',
+]);
+
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="d-flex justify-content-center align-items-center " style="min-height: 75vh;">
 
-    <p>Please fill out the following fields to login:</p>
+    <div class="shadow  p-5 mb-5 bg-body rounded-3 ">
 
-    <div class="row">
-        <div class="col-lg-5">
+        <h1 class="text-center">Авторизация</h1>
 
-            <?php $form = ActiveForm::begin([
-                'id' => 'login-form',
-                'fieldConfig' => [
-                    'template' => "{label}\n{input}\n{error}",
-                    'labelOptions' => ['class' => 'col-lg-1 col-form-label mr-lg-3'],
-                    'inputOptions' => ['class' => 'col-lg-3 form-control'],
-                    'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
-                ],
-            ]); ?>
+        <p>Пожалуйста, заполните следующие поля для входа в систему:</p>
+        <div>
+            <div class="mb-3">
+                <?=
+                $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email');
+                ?>
+            </div>
+            <div class="mb-3">
+                <?=
+                $form->field($model, 'password')->passwordInput()->label('Пароль');
+                ?>
+            </div>
+        </div>
 
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
-            <?= $form->field($model, 'password')->passwordInput() ?>
-
-            <?= $form->field($model, 'rememberMe')->checkbox([
-                'template' => "<div class=\"custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            ]) ?>
-
-            <div class="form-group">
-                <div>
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <?= Html::submitButton($content = "Войти", ['id' => 'signup-button', 'class' => 'btn btn-success']) ?>
+                </div>
+                <div class="col-3">
+                </div>
+                <div class="col mt-2">
+                    <?= $form->field($model, 'rememberMe')->checkbox([
+                        'template' => "<div class=\"custom-control custom-checkbox \">{input} {label}</div>\n<div class=\"col-lg-8 \">{error}</div>",
+                    ])->label('Запомнить меня') ?>
                 </div>
             </div>
-
-            <?php ActiveForm::end(); ?>
-
-            <div style="color:#999;">
-                You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-                To modify the username/password, please check out the code <code>app\models\User::$users</code>.
-            </div>
-
         </div>
+        <p class="text-center">Еще не зарегистрированны? <a href="/login/signup">Регистрация</a></p>
     </div>
-</div>
+
+    <?php \yii\bootstrap5\ActiveForm::end() ?>
+
+
+
+
